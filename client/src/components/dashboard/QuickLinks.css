@@ -1,0 +1,36 @@
+.quick-links-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 2rem;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+}
+
+.quick-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.quick-item {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.quick-item:hover {
+    transform: scale(1.2);
+}
+
+.quick-item img {
+    width: 16px;
+    height: 16px;
+}

@@ -1,0 +1,5 @@
+/* Inherited mostly from Dashboard.css but kept specific if needed */
+.dashboard-panel.dragging {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}

@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String?
+  bookmarks Bookmark[]
+  panels    Panel[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Bookmark {
+  id          Int      @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  tags        String?  // Comma-separated or JSON
+  folder      String?
+  isFavorite  Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Panel {
+  id        Int      @id @default(autoincrement())
+  type      String   // 'bookmarks', 'news', 'reading-list', 'custom'
+  title     String
+  settings  String?  // JSON string for widget settings (e.g., RSS URL)
+  order     Int      @default(0)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

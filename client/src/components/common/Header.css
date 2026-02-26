@@ -1,0 +1,116 @@
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 70px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+}
+
+.logo span {
+    color: var(--accent-primary);
+}
+
+.search-container {
+    position: relative;
+    width: 400px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    padding-right: 3rem;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.search-container input:focus {
+    border-color: var(--accent-primary);
+    outline: none;
+}
+
+.search-container kbd {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.1rem 0.4rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.icon-btn {
+    background: none;
+    font-size: 1.25rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.add-btn-header {
+    padding: 0.5rem 1rem;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.add-btn-header:hover {
+    background-color: var(--border-color);
+}
+
+.logout-btn,
+.login-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--accent-primary);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.logout-btn:hover,
+.login-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        display: none;
+    }
+}
