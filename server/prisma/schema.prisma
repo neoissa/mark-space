@@ -17,6 +17,10 @@ model User {
   name      String?
   bookmarks Bookmark[]
   panels    Panel[]
+  tabs      Tab[]
+  notes     Note[]
+  cities    City[]
+  newsSources NewsSource[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -26,23 +30,68 @@ model Bookmark {
   title       String
   url         String
   description String?
-  tags        String?  // Comma-separated or JSON
+  tags        String?  // comma separated or JSON
   folder      String?
   isFavorite  Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
+  openCount   Int      @default(0)
+  lastOpened  DateTime?
+  aiSummary   String?
   userId      Int
+  user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Panel {
-  id        Int      @id @default(autoincrement())
-  type      String   // 'bookmarks', 'news', 'reading-list', 'custom'
+  id        String   @id // client-side UUID or string
+  type      String   // 'bookmarks', 'news', 'weather', 'notes'
   title     String
-  settings  String?  // JSON string for widget settings (e.g., RSS URL)
+  icon      String?  // icon name from Lucide
+  settings  String?  // JSON string for widget settings
   order     Int      @default(0)
-  user      User     @relation(fields: [userId], references: [id])
   userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Tab {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String
+  icon      String?
+  order     Int
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  title     String?
+  content   String   // Rich text (HTML/Markdown)
+  isKeepSync Boolean @default(false)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  name      String
+  order     Int      @default(0)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model NewsSource {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String   // Feed URL
+  type      String   @default("rss") // rss, atom, json
+  isEnabled Boolean  @default(true)
+  order     Int      @default(0)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

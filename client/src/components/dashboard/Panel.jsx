@@ -1,9 +1,6 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Maximize2, X } from 'lucide-react';
-import './Panel.css';
+import * as Icons from 'lucide-react';
 
-const Panel = ({ id, title, children, onRemove, onExpand }) => {
+const Panel = ({ id, title, icon, children, onRemove, onExpand }) => {
     const {
         attributes,
         listeners,
@@ -12,6 +9,8 @@ const Panel = ({ id, title, children, onRemove, onExpand }) => {
         transition,
         isDragging
     } = useSortable({ id });
+
+    const IconComponent = icon && Icons[icon] ? Icons[icon] : null;
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -24,12 +23,15 @@ const Panel = ({ id, title, children, onRemove, onExpand }) => {
         <div ref={setNodeRef} style={style} className={`dashboard-panel ${isDragging ? 'dragging' : ''}`}>
             <div className="panel-header">
                 <div className="panel-drag-handle" {...attributes} {...listeners}>
-                    <GripVertical size={18} />
+                    <Icons.GripVertical size={18} />
                 </div>
-                <h3 className="panel-title">{title}</h3>
+                <div className="panel-title-group">
+                    {IconComponent && <IconComponent size={20} className="panel-icon-main" />}
+                    <h3 className="panel-title">{title}</h3>
+                </div>
                 <div className="panel-actions">
-                    <button onClick={onExpand} title="Expand"><Maximize2 size={16} /></button>
-                    <button onClick={onRemove} title="Remove" className="remove-btn"><X size={16} /></button>
+                    <button onClick={onExpand} title="Expand"><Icons.Maximize2 size={16} /></button>
+                    <button onClick={onRemove} title="Remove" className="remove-btn"><Icons.X size={16} /></button>
                 </div>
             </div>
             <div className="panel-content">

@@ -42,11 +42,21 @@
     cursor: grabbing;
 }
 
+.panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.panel-icon-main {
+    color: var(--accent-primary);
+}
+
 .panel-title {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-primary);
-    flex: 1;
 }
 
 .panel-actions {

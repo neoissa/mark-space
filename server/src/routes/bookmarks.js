@@ -34,10 +34,38 @@ router.get('/', authMiddleware, async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
     const { title, url, description, tags, folder, isFavorite } = req.body;
     try {
+        // Mock AI Summary
+        const aiSummary = `AI Insight: This resource appears to be focused on ${title}. It provides valuable information regarding ${new URL(url).hostname}.`;
+
         const bookmark = await prisma.bookmark.create({
-            data: { title, url, description, tags, folder, isFavorite: isFavorite || false, userId: req.user.id }
+            data: {
+                title,
+                url,
+                description,
+                tags,
+                folder,
+                isFavorite: isFavorite || false,
+                aiSummary,
+                userId: req.user.id
+            }
         });
         res.status(201).json(bookmark);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Increment open count
+router.post('/:id/open', authMiddleware, async (req, res) => {
+    try {
+        const bookmark = await prisma.bookmark.update({
+            where: { id: parseInt(req.params.id), userId: req.user.id },
+            data: {
+                openCount: { increment: 1 },
+                lastOpened: new Date()
+            }
+        });
+        res.json(bookmark);
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }

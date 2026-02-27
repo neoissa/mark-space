@@ -4,6 +4,10 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStr
 import { useBookmarks } from '../../store/BookmarkContext';
 import Panel from './Panel';
 import BookmarkCard from './BookmarkCard';
+import NewsWidget from './NewsWidget';
+import NotesPanel from './NotesPanel';
+import WeatherWidget from './WeatherWidget';
+import AppLoader from './AppLoader';
 import './Dashboard.css';
 
 const Dashboard = ({ query }) => {
@@ -25,11 +29,14 @@ const Dashboard = ({ query }) => {
         if (panels.length > 0) {
             setActivePanels(panels);
         } else {
-            // Default panels if none exist in cloud
+            // Default modular layout
             setActivePanels([
-                { id: 'p1', title: '🔖 Recent Bookmarks', type: 'bookmarks', order: 0 },
-                { id: 'p2', title: '🎬 Media', type: 'bookmarks', filter: 'Media', order: 1 },
-                { id: 'p3', title: '📰 Latest News', type: 'news', order: 2 },
+                { id: 'p1', title: 'My Bookmarks', type: 'bookmarks', icon: 'Bookmark', order: 0 },
+                { id: 'p2', title: 'Favorite News', type: 'news', icon: 'Newspaper', order: 1 },
+                { id: 'p3', title: 'Quick Notes', type: 'notes', icon: 'FileText', order: 2 },
+                { id: 'p4', title: 'Weather', type: 'weather', icon: 'CloudSun', order: 3 },
+                { id: 'p5', title: 'Google Sites', type: 'bookmarks', filter: 'google-sites', icon: 'Globe', order: 4 },
+                { id: 'p6', title: 'Work Links', type: 'bookmarks', filter: 'work', icon: 'Briefcase', order: 5 },
             ]);
         }
     }, [panels]);
@@ -48,16 +55,22 @@ const Dashboard = ({ query }) => {
 
     const renderPanelContent = (panel) => {
         if (panel.type === 'bookmarks') {
-            let filtered = panel.filter
-                ? bookmarks.filter(b => b.tags && b.tags.includes(panel.filter))
-                : bookmarks;
+            let filtered = bookmarks;
+
+            if (panel.filter === 'google-sites') {
+                filtered = bookmarks.filter(b => b.url?.includes('sites.google.com'));
+            } else if (panel.filter === 'work') {
+                filtered = bookmarks.filter(b => b.tags?.includes('Work') || b.folder === 'Work');
+            } else if (panel.filter) {
+                filtered = bookmarks.filter(b => b.tags?.includes(panel.filter));
+            }
 
             if (query) {
                 const q = query.toLowerCase();
                 filtered = filtered.filter(b =>
                     b.title?.toLowerCase().includes(q) ||
                     b.url?.toLowerCase().includes(q) ||
-                    b.tags?.toLowerCase().includes(q)
+                    (typeof b.tags === 'string' && b.tags.toLowerCase().includes(q))
                 );
             } else if (!panel.filter) {
                 filtered = filtered.slice(0, 10);
@@ -71,6 +84,7 @@ const Dashboard = ({ query }) => {
                             bookmark={bm}
                             onFavorite={() => toggleFavorite(bm.id)}
                             onDelete={() => deleteBookmark(bm.id)}
+                            onOpen={() => trackOpen(bm.id)}
                             onEdit={(b) => console.log('Edit', b)}
                         />
                     ))}
@@ -79,40 +93,44 @@ const Dashboard = ({ query }) => {
             );
         }
 
-        if (panel.type === 'news') {
-            return <NewsWidget />;
-        }
+        if (panel.type === 'news') return <NewsWidget />;
+        if (panel.type === 'notes') return <NotesPanel />;
+        if (panel.type === 'weather') return <WeatherWidget />;
 
-        return <p>Custom widget content</p>;
+        return <p>Custom widget coming soon...</p>;
     };
 
     if (loading) return <div className="loading-state">Syncing with cloud...</div>;
 
     return (
-        <div className="dashboard-container">
-            <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-            >
-                <SortableContext
-                    items={activePanels.map(p => p.id)}
-                    strategy={rectSortingStrategy}
+        <div className="dashboard-wrapper">
+            <div className="dashboard-container">
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
                 >
-                    <div className="panels-grid">
-                        {activePanels.map((panel) => (
-                            <Panel
-                                key={panel.id}
-                                id={panel.id}
-                                title={panel.title}
-                                onRemove={() => console.log('Remove', panel.id)}
-                            >
-                                {renderPanelContent(panel)}
-                            </Panel>
-                        ))}
-                    </div>
-                </SortableContext>
-            </DndContext>
+                    <SortableContext
+                        items={activePanels.map(p => p.id)}
+                        strategy={rectSortingStrategy}
+                    >
+                        <div className="panels-grid">
+                            {activePanels.map((panel) => (
+                                <Panel
+                                    key={panel.id}
+                                    id={panel.id}
+                                    title={panel.title}
+                                    icon={panel.icon}
+                                    onRemove={() => console.log('Remove', panel.id)}
+                                >
+                                    {renderPanelContent(panel)}
+                                </Panel>
+                            ))}
+                        </div>
+                    </SortableContext>
+                </DndContext>
+            </div>
+            <AppLoader />
         </div>
     );
 };

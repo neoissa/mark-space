@@ -8,6 +8,10 @@ dotenv.config();
 const authRoutes = require('./routes/auth');
 const bookmarkRoutes = require('./routes/bookmarks');
 const panelRoutes = require('./routes/panels');
+const tabRoutes = require('./routes/tabs');
+const noteRoutes = require('./routes/notes');
+const cityRoutes = require('./routes/cities');
+const newsSourcesRoutes = require('./routes/newsSources');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -20,6 +24,10 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
 app.use('/api/panels', panelRoutes);
+app.use('/api/tabs', tabRoutes);
+app.use('/api/notes', noteRoutes);
+app.use('/api/cities', cityRoutes);
+app.use('/api/news-sources', newsSourcesRoutes);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date() });

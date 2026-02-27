@@ -1,7 +1,7 @@
 import { ExternalLink, Copy, Share2, Heart, Trash2, Edit3 } from 'lucide-react';
 import './BookmarkCard.css';
 
-const BookmarkCard = ({ bookmark, onFavorite, onDelete, onEdit }) => {
+const BookmarkCard = ({ bookmark, onFavorite, onDelete, onEdit, onOpen }) => {
     const getDomain = (url) => {
         try {
             return new URL(url).hostname.replace('www.', '');
@@ -14,6 +14,11 @@ const BookmarkCard = ({ bookmark, onFavorite, onDelete, onEdit }) => {
         e.stopPropagation();
         navigator.clipboard.writeText(bookmark.url);
         // Could add a toast notification here
+    };
+
+    const handleOpen = () => {
+        if (onOpen) onOpen(bookmark.id);
+        window.open(bookmark.url, '_blank');
     };
 
     return (
@@ -40,7 +45,7 @@ const BookmarkCard = ({ bookmark, onFavorite, onDelete, onEdit }) => {
             </div>
 
             <div className="card-actions">
-                <button onClick={() => window.open(bookmark.url, '_blank')} title="Open"><ExternalLink size={16} /></button>
+                <button onClick={handleOpen} title="Open"><ExternalLink size={16} /></button>
                 <button onClick={copyUrl} title="Copy URL"><Copy size={16} /></button>
                 <button onClick={() => onFavorite(bookmark.id)} title="Favorite" className={bookmark.isFavorite ? 'active' : ''}>
                     <Heart size={16} fill={bookmark.isFavorite ? 'currentColor' : 'none'} />
