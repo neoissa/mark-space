@@ -1,1 +1,21 @@
-node_modules
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production
+dist/
+build/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+*.pem
+*.suo
+*.sln
+*.sw?
+
+# Vercel
+.vercel
+.next
