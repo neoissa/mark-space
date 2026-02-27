@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    gap: 1rem;
 }
 
 .notes-toolbar {
@@ -11,23 +10,72 @@
     align-items: center;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
 }
 
-.toolbar-right {
+.formatting-btns {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
-.notes-editor {
-    flex: 1;
+.formatting-btns button {
     background: none;
     border: none;
+    padding: 0.4rem;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.formatting-btns button:hover {
+    background: var(--bg-primary);
+    color: var(--accent-primary);
+}
+
+.toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notes-editor-rich {
+    flex: 1;
+    min-height: 200px;
     color: var(--text-primary);
     font-size: 1rem;
     line-height: 1.6;
-    resize: none;
     outline: none;
-    font-family: inherit;
+    padding: 0.5rem;
+    overflow-y: auto;
+}
+
+.notes-editor-rich[contenteditable]:empty:before {
+    content: attr(placeholder);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.notes-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+.keep-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.keep-link:hover {
+    color: var(--accent-primary);
 }
 
 .save-btn {
@@ -40,23 +88,20 @@
     border-radius: var(--radius-sm);
     font-size: 0.85rem;
     font-weight: 600;
+    border: none;
+    cursor: pointer;
 }
 
-.sync-btn,
-.toolbar-right a {
+.sync-btn {
+    background: none;
+    border: none;
     color: var(--text-secondary);
-    transition: color 0.2s;
-}
-
-.sync-btn:hover,
-.toolbar-right a:hover {
-    color: var(--accent-primary);
+    cursor: pointer;
 }
 
 .keep-status {
     font-size: 0.75rem;
     color: #f59e0b;
-    /* Amber for Keep */
     display: flex;
     align-items: center;
     gap: 0.4rem;
